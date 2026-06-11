@@ -4,6 +4,74 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Outfit', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-orbitron: 'Orbitron', monospace;
+}
+
+/* Theme definition variables */
+.theme-adrian {
+    --bg-main: #050F0B;
+    --bg-card: #0E1C15;
+    --primary: #00FF9D;
+    --primary-hover: #34D399;
+    --text-main: #E6F4EA;
+    --text-muted: #94A3B8;
+    --border-glow: rgba(0, 255, 157, 0.2);
+    --border-color: #1A3025;
+}
+.theme-petrova {
+    --bg-main: #120A21;
+    --bg-card: #23123A;
+    --primary: #FF2E93;
+    --primary-hover: #A855F7;
+    --text-main: #F4F1FA;
+    --text-muted: #94A3B8;
+    --border-glow: rgba(255, 46, 147, 0.2);
+    --border-color: #3C1E5C;
+}
+.theme-light {
+    --bg-main: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --primary: #4F46E5;
+    --primary-hover: #4338CA;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --border-glow: rgba(79, 70, 229, 0.1);
+    --border-color: #E2E8F0;
+}
+.theme-dark {
+    --bg-main: #030712;
+    --bg-card: #1F2937;
+    --primary: #F59E0B;
+    --primary-hover: #D97706;
+    --text-main: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --border-glow: rgba(245, 158, 11, 0.2);
+    --border-color: #374151;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+}
+
+/* Neo-brutalism semi-3D buttons */
+.btn-semi-3d {
+    background-color: var(--primary);
+    color: #050F0B; /* Dark text for contrast */
+    font-weight: 700;
+    border: 2px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    transition: all 0.1s ease-in-out;
+}
+.btn-semi-3d:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000;
+}
+.btn-semi-3d:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
 }
