@@ -33,6 +33,12 @@
                     <span>📁</span> <span>PDF Document Intake</span>
                 </h2>
                 
+                @if($errors->has('pdf'))
+                    <div class="p-3 bg-red-950/50 border border-red-500 text-red-200 text-xs rounded-xl">
+                        {{ $errors->first('pdf') }}
+                    </div>
+                @endif
+
                 @if($note->pdf_path)
                     <div class="p-4 bg-[color:var(--bg-main)] border border-green-500/30 rounded-xl flex items-center justify-between">
                         <div class="flex items-center space-x-3 overflow-hidden">
@@ -42,20 +48,26 @@
                                 <p class="text-[10px] text-green-400">Teks berhasil diekstrak!</p>
                             </div>
                         </div>
-                        <button class="text-xs text-red-400 hover:underline cursor-pointer">Ganti</button>
+                        <label for="pdf-change-input" class="text-xs text-red-400 hover:underline cursor-pointer">Ganti</label>
                     </div>
+
+                    <form action="{{ route('notes.pdf.upload', $note) }}" method="POST" enctype="multipart/form-data" class="hidden" id="pdf-change-form">
+                        @csrf
+                        <input type="file" name="pdf" id="pdf-change-input" accept="application/pdf" onchange="document.getElementById('pdf-change-form').submit()">
+                    </form>
                 @else
-                    <!-- Drag & Drop Mock Area -->
-                    <div class="border-2 border-dashed border-[color:var(--border-color)] rounded-xl p-8 text-center flex flex-col items-center justify-center space-y-3 hover:border-[color:var(--primary)] transition duration-200 bg-[color:var(--bg-main)]/50">
-                        <span class="text-4xl">📥</span>
-                        <div>
-                            <p class="text-sm font-semibold text-[color:var(--text-main)]">Pilih atau Seret Berkas PDF</p>
-                            <p class="text-[10px] text-[color:var(--text-muted)] mt-1">Ukuran berkas maksimal: 2MB</p>
-                        </div>
-                        <button class="px-4 py-1.5 rounded-lg border border-[color:var(--primary)] text-[color:var(--primary)] text-xs font-bold hover:bg-[color:var(--primary)] hover:text-black transition cursor-pointer">
-                            Unggah PDF
-                        </button>
-                    </div>
+                    <!-- File Upload Form -->
+                    <form action="{{ route('notes.pdf.upload', $note) }}" method="POST" enctype="multipart/form-data" id="pdf-upload-form" class="space-y-3">
+                        @csrf
+                        <label class="border-2 border-dashed border-[color:var(--border-color)] rounded-xl p-8 text-center flex flex-col items-center justify-center space-y-3 hover:border-[color:var(--primary)] transition duration-200 bg-[color:var(--bg-main)]/50 cursor-pointer block">
+                            <input type="file" name="pdf" accept="application/pdf" required class="hidden" onchange="document.getElementById('pdf-upload-form').submit()">
+                            <span class="text-4xl">📥</span>
+                            <div>
+                                <p class="text-sm font-semibold text-[color:var(--text-main)]">Pilih atau Seret Berkas PDF</p>
+                                <p class="text-[10px] text-[color:var(--text-muted)] mt-1">Ukuran berkas maksimal: 2MB</p>
+                            </div>
+                        </label>
+                    </form>
                 @endif
             </div>
 
@@ -68,6 +80,11 @@
                 <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-xs min-h-[120px] max-h-[200px] overflow-y-auto leading-relaxed">
                     @if($note->summary)
                         <p class="whitespace-pre-line">{{ $note->summary }}</p>
+                    @elseif($note->pdf_extracted_text)
+                        <div class="space-y-1">
+                            <p class="text-[10px] text-[color:var(--text-muted)] italic">Pratinjau Teks Dokumen (Grounding):</p>
+                            <p class="line-clamp-6 text-[color:var(--text-main)] font-mono">{{ Str::limit($note->pdf_extracted_text, 300) }}</p>
+                        </div>
                     @else
                         <div class="text-center text-[color:var(--text-muted)] py-8 space-y-2">
                             <p>"Rocky has not summarized this page yet, friend!"</p>
@@ -113,25 +130,27 @@
 
                 <!-- Generation Trigger Buttons -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 cursor-not-allowed opacity-50" disabled>
+                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">✍️</span>
                         <span>Buat Catatan</span>
                     </button>
                     
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 cursor-not-allowed opacity-50" disabled>
+                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">📝</span>
                         <span>Ringkas Dokumen</span>
                     </button>
 
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 cursor-not-allowed opacity-50" disabled>
+                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">🎯</span>
                         <span>Generate Quiz</span>
                     </button>
                 </div>
                 
-                <p class="text-[10px] text-[color:var(--text-muted)] text-center italic">
-                    *Harap unggah berkas PDF terlebih dahulu untuk mengaktifkan tombol kendali AI Rocky.
-                </p>
+                @if(!$note->pdf_extracted_text)
+                    <p class="text-[10px] text-[color:var(--text-muted)] text-center italic">
+                        *Harap unggah berkas PDF terlebih dahulu untuk mengaktifkan tombol kendali AI Rocky.
+                    </p>
+                @endif
             </div>
 
             <!-- Workspace Output/Display Area -->
