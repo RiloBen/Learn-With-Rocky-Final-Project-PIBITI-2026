@@ -28,4 +28,27 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relationships.
+     */
+    public function notes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function stats(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserStats::class, 'user_id');
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->stats()->create();
+        });
+    }
 }
