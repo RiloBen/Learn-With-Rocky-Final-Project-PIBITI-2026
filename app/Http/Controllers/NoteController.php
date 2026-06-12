@@ -58,6 +58,64 @@ class NoteController extends Controller
     }
 
     /**
+     * Upload a PDF file to the notebook and extract its text content using Gemini.
+     */
+    public function uploadPdf(Request $request, Note $note): RedirectResponse
+    {
+        if ($note->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'pdf' => ['required', 'file', 'mimes:pdf', 'max:2048'],
+        ]);
+
+        // Store PDF in private storage
+        $path = $request->file('pdf')->store('pdfs');
+
+        try {
+            // Instantiate an ad-hoc text extraction agent
+            $agent = \Laravel\Ai\agent('You are an expert Eridian text extractor. Your only job is to extract and return all plain text from the attached PDF document. Do not add any greeting, formatting, markdown styling, explanation, or commentary. Simply return the text content of the document exactly as it is.');
+
+            // Call the agent using the uploaded file as an attachment
+            $response = $agent->prompt('Extract all text content from this document.', [
+                $request->file('pdf'),
+            ], provider: 'gemini');
+
+            $extractedText = trim((string) $response);
+
+            // Check if empty or lacking alphanumeric characters (indicating a scanned image)
+            if (empty($extractedText) || strlen(preg_replace('/[^a-zA-Z0-9]/', '', $extractedText)) < 10) {
+                return back()->withErrors([
+                    'pdf' => 'Rocky tidak bisa baca PDF! Belum ada teks di sini. Gunakan PDF dengan ketikan, friend! Question?',
+                ]);
+            }
+
+            // Save path and extracted text to database
+            $note->update([
+                'pdf_path' => $path,
+                'pdf_extracted_text' => $extractedText,
+            ]);
+
+            return back()->with('status', 'pdf-uploaded');
+
+        } catch (\Exception $e) {
+            $message = strtolower($e->getMessage());
+            
+            // Check if it's password protected
+            if (str_contains($message, 'password') || str_contains($message, 'encrypt') || str_contains($message, 'decrypt') || str_contains($message, 'protect') || str_contains($message, 'shield')) {
+                return back()->withErrors([
+                    'pdf' => 'Apology! PDF has shield lock! Rocky cannot break, friend! Question?',
+                ]);
+            }
+
+            return back()->withErrors([
+                'pdf' => 'Apology! Rocky face error when reading PDF, friend! Error: ' . $e->getMessage() . '. Question?',
+            ]);
+        }
+    }
+
+    /**
      * Remove the specified notebook from storage.
      */
     public function destroy(Note $note): RedirectResponse
