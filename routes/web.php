@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,7 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/password', [AuthController::class, 'updatePassword'])->name('settings.password');
     Route::post('/settings/theme', [AuthController::class, 'updateTheme'])->name('settings.theme');
 
-    // dashboard (placeholder for Milestone 1)
+    // notebooks
+    Route::resource('notes', NoteController::class)->except(['create', 'edit', 'update']);
+
+    // dashboard
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
