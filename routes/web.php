@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
     // notebooks
     Route::resource('notes', NoteController::class)->except(['create', 'edit', 'update']);
+    Route::post('/notes/{note}/pdf', [NoteController::class, 'uploadPdf'])->name('notes.pdf.upload');
 
     // dashboard
     Route::get('/dashboard', function () {
