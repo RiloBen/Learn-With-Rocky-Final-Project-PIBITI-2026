@@ -105,7 +105,7 @@
         @if($accuracy >= 80 && $answered > 0)
             <div class="p-4 bg-green-950/30 border border-green-500/50 rounded-xl flex items-center space-x-3 text-sm text-green-300">
                 <span class="text-2xl">✨🕷️</span>
-                <p><strong>"Rocky Amaze! Amaze! Accuracy super high! Fist bump, friend! Keep studying!"</strong></p>
+                <p><strong>"Amaze! Amaze! Amaze! Accuracy super high! Fist bump, friend! Keep studying!"</strong></p>
             </div>
         @elseif($answered > 0)
             <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl flex items-center space-x-3 text-sm text-[color:var(--text-muted)]">

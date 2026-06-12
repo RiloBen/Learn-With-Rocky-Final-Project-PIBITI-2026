@@ -10,13 +10,13 @@
 
     @if(session('status') === 'password-updated')
         <div class="p-4 bg-green-950/50 border border-green-500 text-green-200 rounded-xl text-sm">
-            "Rocky fix password! Password secure now, friend! Amaze!"
+            "Rocky fix password! Password secure now!"
         </div>
     @endif
 
     @if(session('status') === 'theme-updated')
         <div class="p-4 bg-green-950/50 border border-green-500 text-green-200 rounded-xl text-sm">
-            "Rocky switch control screen! Beautiful visual! Fist bump!"
+            "Rocky switch control screen! It looks beautiful!"
         </div>
     @endif
 

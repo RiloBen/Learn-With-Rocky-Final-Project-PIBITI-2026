@@ -27,7 +27,7 @@
                     <span class="text-6xl animate-bounce">🕸️</span>
                     <h2 class="text-xl font-bold font-['Orbitron'] text-[color:var(--text-main)]">Belum Ada Notebook</h2>
                     <p class="text-sm text-[color:var(--text-muted)] max-w-sm">
-                        "No notebooks, friend! Add study module first! Upload PDF to calculate physics! Question?"
+                        "No notebooks, friend! Add study module first! Upload PDF! Question?"
                     </p>
                 </div>
             @else
@@ -70,7 +70,7 @@
             <h2 class="text-xl font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
                 <span>➕</span> <span>Buat Notebook</span>
             </h2>
-            <p class="text-xs text-[color:var(--text-muted)]">"Add new experiment entry, friend!"</p>
+            <p class="text-xs text-[color:var(--text-muted)]">"Add new notebook, friend!"</p>
 
             @if($errors->any())
                 <div class="p-3 bg-red-950/50 border border-red-500 text-red-200 text-xs rounded-lg">

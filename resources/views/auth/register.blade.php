@@ -8,7 +8,7 @@
         <div class="text-center mb-6">
             <span class="text-3xl">📝</span>
             <h2 class="text-2xl font-bold font-['Orbitron'] text-[color:var(--text-main)] mt-2">Daftar Akun Baru</h2>
-            <p class="text-xs text-[color:var(--text-muted)] mt-1">"Create name tag, friend! Rocky notes you!"</p>
+            <p class="text-xs text-[color:var(--text-muted)] mt-1">"Create name tag, friend!"</p>
         </div>
 
         @if($errors->any())

@@ -87,7 +87,7 @@ class NoteController extends Controller
             // Check if empty or lacking alphanumeric characters (indicating a scanned image)
             if (empty($extractedText) || strlen(preg_replace('/[^a-zA-Z0-9]/', '', $extractedText)) < 10) {
                 return back()->withErrors([
-                    'pdf' => 'Rocky tidak bisa baca PDF! Belum ada teks di sini. Gunakan PDF dengan ketikan, friend! Question?',
+                    'pdf' => 'Apology! Rocky cannot read PDF! There is no text here yet. Please use a PDF with typed text!',
                 ]);
             }
 
@@ -105,12 +105,12 @@ class NoteController extends Controller
             // Check if it's password protected
             if (str_contains($message, 'password') || str_contains($message, 'encrypt') || str_contains($message, 'decrypt') || str_contains($message, 'protect') || str_contains($message, 'shield')) {
                 return back()->withErrors([
-                    'pdf' => 'Apology! PDF has shield lock! Rocky cannot break, friend! Question?',
+                    'pdf' => 'Apology! PDF has shield lock! Rocky cannot break it.',
                 ]);
             }
 
             return back()->withErrors([
-                'pdf' => 'Apology! Rocky face error when reading PDF, friend! Error: ' . $e->getMessage() . '. Question?',
+                'pdf' => 'Apology! Rocky face error when reading PDF. Error: ' . $e->getMessage() . '. Question?',
             ]);
         }
     }

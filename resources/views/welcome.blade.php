@@ -12,7 +12,7 @@
         <!-- Dialog Bubble -->
         <div class="relative bg-[color:var(--bg-card)] border-2 border-[color:var(--primary)] rounded-2xl p-4 max-w-sm mb-6 shadow-[0_0_15px_var(--border-glow)]">
             <p class="font-mono text-sm leading-relaxed text-[color:var(--text-main)]">
-                "Hello, friend! You want study science? Question? Rocky help summarizes, makes quiz! Amaze! Amaze!"
+                "Hello, friend! You want study science? Question? Rocky help summarizes, makes quiz!"
             </p>
             <div class="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[color:var(--bg-card)] border-r-2 border-b-2 border-[color:var(--primary)] rotate-45"></div>
         </div>
