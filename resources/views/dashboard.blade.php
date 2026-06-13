@@ -26,7 +26,7 @@
             <span class="text-4xl">📓</span>
             <div>
                 <p class="text-2xl font-bold font-['Orbitron'] text-[color:var(--primary)]">
-                    {{ auth()->user()->stats->total_notes ?? 0 }}
+                    {{ auth()->user()->notes()->count() }}
                 </p>
                 <p class="text-xs text-[color:var(--text-muted)] font-semibold uppercase tracking-wider">Catatan Dibuat</p>
             </div>
@@ -37,7 +37,7 @@
             <span class="text-4xl">🧪</span>
             <div>
                 <p class="text-2xl font-bold font-['Orbitron'] text-[color:var(--primary)]">
-                    {{ auth()->user()->stats->total_quizzes_created ?? 0 }}
+                    {{ auth()->user()->quizzes()->count() }}
                 </p>
                 <p class="text-xs text-[color:var(--text-muted)] font-semibold uppercase tracking-wider">Kuis Dibuat</p>
             </div>
