@@ -83,7 +83,7 @@ class NoteController extends Controller
 
             // Call the agent using the uploaded file as an attachment
             $response = $agent->prompt('Extract all text content from this document.', [
-                $request->file('pdf'),
+                Storage::path($path),
             ], provider: 'gemini');
 
             $extractedText = trim((string) $response);
