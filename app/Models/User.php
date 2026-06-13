@@ -42,6 +42,24 @@ class User extends Authenticatable
         return $this->hasOne(UserStats::class, 'user_id');
     }
 
+    public function quizzes(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(Quiz::class, Note::class);
+    }
+
+    /**
+     * Get the user's stats, creating them if they don't exist.
+     */
+    public function getStatsAttribute(): UserStats
+    {
+        if (!$this->relationLoaded('stats') || is_null($this->getRelation('stats'))) {
+            $stats = $this->stats()->firstOrCreate();
+            $this->setRelation('stats', $stats);
+        }
+
+        return $this->getRelation('stats');
+    }
+
     /**
      * The "booted" method of the model.
      */
