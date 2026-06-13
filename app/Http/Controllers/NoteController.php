@@ -75,16 +75,18 @@ class NoteController extends Controller
         ]);
 
         // Store PDF in private storage
-        $path = $request->file('pdf')->store('pdfs');
+        $file = $request->file('pdf');
 
         try {
+            // Allow extra time for AI text extraction
+            set_time_limit(120);
             // Instantiate an ad-hoc text extraction agent
             $agent = \Laravel\Ai\agent('You are an expert Eridian text extractor. Your only job is to extract and return all plain text from the attached PDF document. Do not add any greeting, formatting, markdown styling, explanation, or commentary. Simply return the text content of the document exactly as it is.');
 
-            // Call the agent using the uploaded file as an attachment
+            // Call the agent using the uploaded file as an attachment (before store moves it)
             $response = $agent->prompt('Extract all text content from this document.', [
-                Storage::path($path),
-            ], provider: 'gemini');
+                $file,
+            ]);
 
             $extractedText = trim((string) $response);
 
@@ -94,6 +96,9 @@ class NoteController extends Controller
                     'pdf' => 'Apology! Rocky cannot read PDF! There is no text here yet. Please use a PDF with typed text!',
                 ]);
             }
+
+            // Store PDF only after successful text extraction
+            $path = $file->store('pdfs');
 
             // Save path and extracted text to database
             $note->update([
@@ -162,7 +167,7 @@ class NoteController extends Controller
 
         $agent = \Laravel\Ai\agent($instructions);
 
-        $stream = $agent->stream("Summarize this document text:\n\n" . $note->pdf_extracted_text, provider: 'gemini');
+        $stream = $agent->stream("Summarize this document text:\n\n" . $note->pdf_extracted_text);
 
         $stream->then(function ($completedResponse) use ($note) {
             $note->update(['summary' => $completedResponse->text]);
@@ -199,7 +204,7 @@ class NoteController extends Controller
 
         $agent = \Laravel\Ai\agent($baseInstructions);
 
-        $stream = $agent->stream("Generate study notes for the following document text:\n\n" . $note->pdf_extracted_text, provider: 'gemini');
+        $stream = $agent->stream("Generate study notes for the following document text:\n\n" . $note->pdf_extracted_text);
 
         $stream->then(function ($completedResponse) use ($note, $styleType) {
             $note->generatedNotes()->updateOrCreate(
@@ -250,7 +255,7 @@ class NoteController extends Controller
                 schema: $schema
             );
 
-            $response = $agent->prompt("Generate quiz questions based on this document text:\n\n" . $note->pdf_extracted_text, provider: 'gemini');
+            $response = $agent->prompt("Generate quiz questions based on this document text:\n\n" . $note->pdf_extracted_text);
 
             $questions = $response['questions'] ?? [];
 
