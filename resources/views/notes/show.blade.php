@@ -77,7 +77,7 @@
                     <span>📝</span> <span>Ringkasan Dokumen</span>
                 </h2>
 
-                <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-xs min-h-[120px] max-h-[200px] overflow-y-auto leading-relaxed">
+                <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-xs min-h-[120px] max-h-[200px] overflow-y-auto leading-relaxed" id="document-summary-text">
                     @if($note->summary)
                         <p class="whitespace-pre-line">{{ $note->summary }}</p>
                     @elseif($note->pdf_extracted_text)
@@ -100,12 +100,18 @@
                     <span>🎯</span> <span>Kuis Pemahaman (Active Recall)</span>
                 </h2>
 
-                <div class="space-y-3">
-                    <!-- For Milestone 2: Mock lists -->
-                    <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-center text-xs text-[color:var(--text-muted)] py-6 space-y-2">
-                        <p>"No quizzes generated yet for this notebook!"</p>
-                        <p class="text-[10px]">Rocky akan membuat kuis berisikan 5-10 pilihan ganda.</p>
-                    </div>
+                <div class="space-y-2 max-h-[250px] overflow-y-auto" id="quiz-list-container">
+                    @forelse($note->quizzes as $index => $quiz)
+                        <button onclick="selectQuiz({{ $quiz->id }})" class="w-full text-left p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl flex items-center justify-between text-xs transition cursor-pointer">
+                            <span>🎯 Kuis #{{ $index + 1 }} ({{ $quiz->questions->count() }} Soal)</span>
+                            <span class="text-[10px] text-[color:var(--text-muted)]">{{ $quiz->created_at->diffForHumans() }}</span>
+                        </button>
+                    @empty
+                        <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-center text-xs text-[color:var(--text-muted)] py-6 space-y-2">
+                            <p>"No quizzes generated yet for this notebook!"</p>
+                            <p class="text-[10px]">Rocky akan membuat kuis berisikan 5-10 pilihan ganda.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -122,25 +128,28 @@
                     
                     <!-- Style Toggle Switcher -->
                     <div class="flex bg-[color:var(--bg-main)] p-1 rounded-xl border border-[color:var(--border-color)] text-xs self-start sm:self-center">
-                        <button class="px-3 py-1.5 rounded-lg bg-[color:var(--primary)] text-black font-bold">Default</button>
-                        <button class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition">Learning</button>
-                        <button class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition">Formal</button>
+                        <button id="style-btn-default" onclick="selectStyle('default')" class="px-3 py-1.5 rounded-lg bg-[color:var(--primary)] text-black font-bold cursor-pointer">Default</button>
+                        <button id="style-btn-learning" onclick="selectStyle('learning')" class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer">Learning</button>
+                        <button id="style-btn-formal" onclick="selectStyle('formal')" class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer">Formal</button>
                     </div>
                 </div>
 
                 <!-- Generation Trigger Buttons -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <button id="generate-note-btn" onclick="generateNote()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">✍️</span>
                         <span>Buat Catatan</span>
                     </button>
                     
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <button id="generate-summary-btn" onclick="generateSummary()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">📝</span>
                         <span>Ringkas Dokumen</span>
                     </button>
 
-                    <button class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <form action="{{ route('notes.quiz.generate', $note) }}" method="POST" id="generate-quiz-form" class="hidden">
+                        @csrf
+                    </form>
+                    <button type="button" onclick="generateQuizSubmit()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">🎯</span>
                         <span>Generate Quiz</span>
                     </button>
@@ -156,23 +165,15 @@
             <!-- Workspace Output/Display Area -->
             <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
                 <div class="flex items-center justify-between border-b border-[color:var(--border-color)] pb-3">
-                    <h3 class="font-bold text-sm font-['Orbitron'] text-[color:var(--text-main)] flex items-center space-x-2">
+                    <h3 class="font-bold text-sm font-['Orbitron'] text-[color:var(--text-main)] flex items-center space-x-2" id="workspace-title">
                         <span>📖</span> <span>Catatan Belajar Rocky</span>
                     </h3>
-                    <span class="text-[10px] text-green-400 font-mono">Status: Ready</span>
+                    <span class="text-[10px] text-green-400 font-mono" id="workspace-status">Status: Ready</span>
                 </div>
 
                 <!-- Scrollable Display Board -->
-                <div class="p-6 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl min-h-[350px] max-h-[500px] overflow-y-auto space-y-4 leading-relaxed text-sm">
-                    <div class="flex flex-col items-center justify-center text-center py-20 space-y-4">
-                        <span class="text-5xl animate-bounce">🕸️🕷️</span>
-                        <div>
-                            <p class="font-bold text-[color:var(--text-main)]">"Workspace is empty, friend!"</p>
-                            <p class="text-xs text-[color:var(--text-muted)] max-w-xs mt-1 mx-auto">
-                                Rocky belum menulis catatan di sini. Unggah berkas dokumen Anda dan klik tombol "Buat Catatan"!
-                            </p>
-                        </div>
-                    </div>
+                <div id="workspace-board" class="p-6 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl min-h-[350px] max-h-[500px] overflow-y-auto space-y-4 leading-relaxed text-sm prose prose-invert max-w-none">
+                    <!-- Loaded dynamically via JS -->
                 </div>
             </div>
 
@@ -180,4 +181,407 @@
 
     </div>
 </div>
+
+<!-- Scripts for Markdown & SSE -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // Configuration for marked.js
+    marked.use({
+        gfm: true,
+        breaks: true
+    });
+
+    // Cache of existing generated notes from database
+    const generatedNotes = {
+        default: @json($note->generatedNotes->where('style_type', 'default')->first()?->content_markdown ?? ''),
+        learning: @json($note->generatedNotes->where('style_type', 'learning')->first()?->content_markdown ?? ''),
+        formal: @json($note->generatedNotes->where('style_type', 'formal')->first()?->content_markdown ?? ''),
+    };
+
+    // Cache of quizzes
+    const quizzes = @json($note->quizzes()->with('questions')->get());
+
+    let currentStyle = 'default';
+    let activeMode = 'note'; // 'note' or 'quiz'
+
+    // Initialize display board
+    document.addEventListener('DOMContentLoaded', () => {
+        selectStyle('default');
+    });
+
+    function selectStyle(style) {
+        activeMode = 'note';
+        currentStyle = style;
+
+        // Reset and highlight active style button
+        ['default', 'learning', 'formal'].forEach(s => {
+            const btn = document.getElementById(`style-btn-${s}`);
+            if (s === style) {
+                btn.className = "px-3 py-1.5 rounded-lg bg-[color:var(--primary)] text-black font-bold cursor-pointer";
+            } else {
+                btn.className = "px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer";
+            }
+        });
+
+        const titleContainer = document.getElementById('workspace-title');
+        titleContainer.innerHTML = `<span>📖</span> <span>Catatan Belajar Rocky (Gaya: ${style.toUpperCase()})</span>`;
+
+        const statusBadge = document.getElementById('workspace-status');
+        statusBadge.innerText = 'Status: Ready';
+        statusBadge.className = 'text-[10px] text-green-400 font-mono';
+
+        const board = document.getElementById('workspace-board');
+        
+        if (generatedNotes[style] && generatedNotes[style].trim() !== '') {
+            board.innerHTML = marked.parse(generatedNotes[style]);
+        } else {
+            board.innerHTML = `
+                <div class="flex flex-col items-center justify-center text-center py-20 space-y-4">
+                    <span class="text-5xl animate-bounce">🕸️🕷️</span>
+                    <div>
+                        <p class="font-bold text-[color:var(--text-main)]">"Workspace is empty for ${style} style, friend!"</p>
+                        <p class="text-xs text-[color:var(--text-muted)] max-w-xs mt-1 mx-auto">
+                            Rocky belum menulis catatan untuk gaya ini. Klik tombol "Buat Catatan" untuk generate otomatis!
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    function generateSummary() {
+        const summaryText = document.getElementById('document-summary-text');
+        const generateBtn = document.getElementById('generate-summary-btn');
+
+        if (!{{ $note->pdf_extracted_text ? 'true' : 'false' }}) return;
+
+        // Update state
+        generateBtn.disabled = true;
+        generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        
+        summaryText.innerHTML = `
+            <div class="space-y-2">
+                <p class="text-xs font-semibold text-[color:var(--primary)] animate-pulse">Rocky is summarizing... Amaze!</p>
+                <div class="h-1.5 w-full bg-[color:var(--bg-card)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[color:var(--primary)] animate-pulse" style="width: 70%"></div>
+                </div>
+                <p id="summary-stream-output" class="text-xs text-[color:var(--text-main)] whitespace-pre-line"></p>
+            </div>
+        `;
+
+        const streamOutput = document.getElementById('summary-stream-output');
+        let fullText = '';
+
+        const eventSource = new EventSource("{{ route('notes.summary.stream', $note) }}");
+
+        eventSource.onmessage = function(event) {
+            if (event.data === '[DONE]') {
+                eventSource.close();
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'text_delta') {
+                    fullText += data.delta;
+                    streamOutput.innerText = fullText;
+                }
+            } catch (e) {
+                console.error("Error parsing summary stream event:", e);
+            }
+        };
+
+        eventSource.onerror = function(err) {
+            console.error("EventSource failed:", err);
+            eventSource.close();
+            generateBtn.disabled = false;
+            generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            summaryText.innerHTML = `<p class="text-red-400">Apology! Rocky faced network issue when summarizing documents, friend!</p>`;
+        };
+    }
+
+    function generateNote() {
+        const board = document.getElementById('workspace-board');
+        const generateBtn = document.getElementById('generate-note-btn');
+        const statusBadge = document.getElementById('workspace-status');
+
+        if (!{{ $note->pdf_extracted_text ? 'true' : 'false' }}) return;
+
+        // Update state
+        generateBtn.disabled = true;
+        generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        statusBadge.innerText = 'Status: Streaming...';
+        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono animate-pulse';
+        
+        board.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-center py-20 space-y-4" id="note-stream-loader">
+                <span class="text-5xl animate-spin">🐾</span>
+                <div>
+                    <p class="font-bold text-[color:var(--text-main)]">Rocky is writing notes! Amaze!</p>
+                    <p class="text-xs text-[color:var(--text-muted)]">Rocky is reading document and writing notes in ${currentStyle} style...</p>
+                </div>
+            </div>
+            <div id="note-stream-output" class="space-y-4"></div>
+        `;
+
+        const streamOutput = document.getElementById('note-stream-output');
+        let fullMarkdown = '';
+
+        const eventSource = new EventSource(`{{ route('notes.generated-note.stream', $note) }}?style_type=${currentStyle}`);
+
+        eventSource.onmessage = function(event) {
+            if (event.data === '[DONE]') {
+                eventSource.close();
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                statusBadge.innerText = 'Status: Ready';
+                statusBadge.className = 'text-[10px] text-green-400 font-mono';
+                
+                // Cache final result
+                generatedNotes[currentStyle] = fullMarkdown;
+                
+                // Final styled render
+                board.innerHTML = marked.parse(fullMarkdown);
+                return;
+            }
+
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'text_delta') {
+                    // Remove loader on first data block
+                    const loader = document.getElementById('note-stream-loader');
+                    if (loader) loader.remove();
+
+                    fullMarkdown += data.delta;
+                    streamOutput.innerHTML = marked.parse(fullMarkdown);
+                }
+            } catch (e) {
+                console.error("Error parsing note stream event:", e);
+            }
+        };
+
+        eventSource.onerror = function(err) {
+            console.error("EventSource failed:", err);
+            eventSource.close();
+            generateBtn.disabled = false;
+            generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            statusBadge.innerText = 'Status: Error';
+            statusBadge.className = 'text-[10px] text-red-400 font-mono';
+            board.innerHTML = `<p class="text-red-400 font-bold text-center py-20">Apology! Rocky faced error when writing notes. Question?</p>`;
+        };
+    }
+
+    function generateQuizSubmit() {
+        const statusBadge = document.getElementById('workspace-status');
+        const board = document.getElementById('workspace-board');
+        
+        statusBadge.innerText = 'Status: Generating Quiz...';
+        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono animate-pulse';
+        
+        board.innerHTML = `
+            <div class="flex flex-col items-center justify-center text-center py-20 space-y-4">
+                <span class="text-5xl animate-bounce">🎯</span>
+                <div>
+                    <p class="font-bold text-[color:var(--text-main)]">Rocky is generating a quiz! Fist bump!</p>
+                    <p class="text-xs text-[color:var(--text-muted)]">Rocky is formulating 5-10 multiple-choice questions from document...</p>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('generate-quiz-form').submit();
+    }
+
+    function selectQuiz(quizId) {
+        activeMode = 'quiz';
+        const quiz = quizzes.find(q => q.id === quizId);
+        if (!quiz) return;
+
+        // Reset style button states since we are in quiz mode
+        ['default', 'learning', 'formal'].forEach(s => {
+            document.getElementById(`style-btn-${s}`).className = "px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer";
+        });
+
+        const titleContainer = document.getElementById('workspace-title');
+        const quizIndex = quizzes.indexOf(quiz) + 1;
+        titleContainer.innerHTML = `<span>🎯</span> <span>Rocky Quiz #${quizIndex} (${quiz.questions.length} Soal)</span>`;
+
+        const statusBadge = document.getElementById('workspace-status');
+        statusBadge.innerText = 'Status: Quiz Active';
+        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono';
+
+        const board = document.getElementById('workspace-board');
+        
+        let html = `
+            <div class="space-y-6">
+                <div class="p-4 bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl">
+                    <p class="text-xs font-semibold text-[color:var(--primary)]">Fist bump! Let's test your knowledge, friend! Question?</p>
+                    <p class="text-[10px] text-[color:var(--text-muted)] mt-1">Pilih jawaban terbaik untuk masing-masing soal di bawah ini.</p>
+                </div>
+                
+                <form id="quiz-submission-form" onsubmit="submitQuiz(event, ${quiz.id})" class="space-y-6">
+        `;
+
+        quiz.questions.forEach((q, qIndex) => {
+            html += `
+                <div class="p-5 bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl space-y-3" id="q-block-${q.id}">
+                    <p class="font-bold text-sm text-[color:var(--text-main)]">${qIndex + 1}. ${escapeHtml(q.question)}</p>
+                    <div class="grid grid-cols-1 gap-2 pl-2">
+            `;
+
+            for (const [key, val] of Object.entries(q.options)) {
+                html += `
+                    <label class="flex items-start space-x-3 p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-main)]/80 border border-[color:var(--border-color)] rounded-lg cursor-pointer transition" id="label-${q.id}-${key}">
+                        <input type="radio" name="question_${q.id}" value="${key}" required class="mt-0.5 text-[color:var(--primary)] focus:ring-[color:var(--primary)]">
+                        <span class="text-xs text-[color:var(--text-main)]"><strong class="text-[color:var(--primary)]">${key}.</strong> ${escapeHtml(val)}</span>
+                    </label>
+                `;
+            }
+
+            html += `
+                    </div>
+                    <div id="q-feedback-${q.id}" class="text-[11px] font-bold mt-2 hidden"></div>
+                </div>
+            `;
+        });
+
+        html += `
+                    <button type="submit" class="w-full py-3 bg-[color:var(--primary)] text-black hover:shadow-[0_0_15px_var(--border-glow)] transition rounded-xl font-bold text-xs uppercase cursor-pointer">
+                        Kirim Jawaban Anda
+                    </button>
+                </form>
+            </div>
+        `;
+
+        board.innerHTML = html;
+    }
+
+    function submitQuiz(event, quizId) {
+        event.preventDefault();
+        const quiz = quizzes.find(q => q.id === quizId);
+        if (!quiz) return;
+
+        const answers = {};
+        quiz.questions.forEach((q) => {
+            const selectedOption = document.querySelector(`input[name="question_${q.id}"]:checked`);
+            answers[q.id] = selectedOption ? selectedOption.value : '';
+        });
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const submitBtn = document.querySelector('#quiz-submission-form button[type="submit"]');
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'MEMPROSES...';
+        }
+
+        fetch(`/notes/{{ $note->id }}/quizzes/${quizId}/submit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ answers })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Gagal mengirim jawaban.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            quiz.questions.forEach((q) => {
+                const result = data.results[q.id];
+                const isCorrect = result ? result.correct : false;
+                const correctAnswer = result ? result.correct_answer : q.correct_answer;
+
+                const selectedOption = document.querySelector(`input[name="question_${q.id}"]:checked`);
+                const answer = selectedOption ? selectedOption.value : '';
+
+                const feedbackDiv = document.getElementById(`q-feedback-${q.id}`);
+                if (feedbackDiv) {
+                    feedbackDiv.classList.remove('hidden');
+                }
+
+                // Reset label styles
+                for (const key of ['A', 'B', 'C', 'D']) {
+                    const lbl = document.getElementById(`label-${q.id}-${key}`);
+                    if (lbl) {
+                        lbl.className = "flex items-start space-x-3 p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-main)]/80 border border-[color:var(--border-color)] rounded-lg cursor-pointer transition";
+                    }
+                }
+
+                const selectedLabel = document.getElementById(`label-${q.id}-${answer}`);
+                const correctLabel = document.getElementById(`label-${q.id}-${correctAnswer}`);
+
+                if (isCorrect) {
+                    if (selectedLabel) {
+                        selectedLabel.className = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-pointer transition text-green-300";
+                    }
+                    if (feedbackDiv) {
+                        feedbackDiv.innerHTML = `<span class="text-green-400 font-bold">✓ Benar! Rocky bangga!</span>`;
+                    }
+                } else {
+                    if (selectedLabel) {
+                        selectedLabel.className = "flex items-start space-x-3 p-3 bg-red-950/20 border border-red-500/50 rounded-lg cursor-pointer transition text-red-300";
+                    }
+                    if (correctLabel) {
+                        correctLabel.className = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-pointer transition text-green-300";
+                    }
+                    if (feedbackDiv) {
+                        feedbackDiv.innerHTML = `<span class="text-red-400 font-bold">✗ Salah. Jawaban benar: ${correctAnswer}. Rocky sedih.</span>`;
+                    }
+                }
+            });
+
+            // Show accuracy banner at the top of the form
+            const board = document.getElementById('workspace-board');
+            
+            const accuracyBanner = document.createElement('div');
+            accuracyBanner.className = `p-4 mb-6 rounded-xl border text-center font-bold text-sm ${data.accuracy >= 80 ? 'bg-green-950/40 border-green-500 text-green-200' : 'bg-red-950/40 border-red-500 text-red-200'}`;
+            
+            let message = `Skor Anda: ${data.correct_count}/${data.total_questions} (${data.accuracy}%). `;
+            if (data.accuracy >= 80) {
+                message += `Amaze! Rocky fix fist bump! 🐾`;
+            } else {
+                message += `Rocky sarankan baca lagi dokumen, friend! You watch, question?`;
+            }
+            accuracyBanner.innerHTML = message;
+            
+            const form = document.getElementById('quiz-submission-form');
+            form.insertBefore(accuracyBanner, form.firstChild);
+
+            // Scroll to top of board
+            board.scrollTop = 0;
+
+            // Disable all inputs so they cannot submit again
+            document.querySelectorAll('#quiz-submission-form input[type="radio"]').forEach(input => {
+                input.disabled = true;
+            });
+            if (submitBtn) {
+                submitBtn.remove();
+            }
+        })
+        .catch(err => {
+            console.error("Gagal mengirim kuis:", err);
+            alert("Terjadi kesalahan saat memproses kuis. Silakan coba lagi!");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'KIRIM JAWABAN ANDA';
+            }
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text.toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
 @endsection

@@ -26,6 +26,12 @@ Route::middleware('auth')->group(function () {
     // notebooks
     Route::resource('notes', NoteController::class)->except(['create', 'edit', 'update']);
     Route::post('/notes/{note}/pdf', [NoteController::class, 'uploadPdf'])->name('notes.pdf.upload');
+    
+    // AI workspace actions
+    Route::get('/notes/{note}/summary/stream', [NoteController::class, 'streamSummary'])->name('notes.summary.stream');
+    Route::get('/notes/{note}/generated-note/stream', [NoteController::class, 'streamGeneratedNote'])->name('notes.generated-note.stream');
+    Route::post('/notes/{note}/quiz', [NoteController::class, 'generateQuiz'])->name('notes.quiz.generate');
+    Route::post('/notes/{note}/quizzes/{quiz}/submit', [NoteController::class, 'submitQuiz'])->name('notes.quizzes.submit');
 
     // dashboard
     Route::get('/dashboard', function () {
