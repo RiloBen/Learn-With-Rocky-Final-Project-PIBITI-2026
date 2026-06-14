@@ -5,18 +5,18 @@
 @section('content')
 <div class="max-w-7xl mx-auto space-y-6">
     <!-- Workspace Header info -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[color:var(--border-color)] pb-4 gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-(--border-color) pb-4 gap-4">
         <div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('notes.index') }}" class="text-[color:var(--text-muted)] hover:text-[color:var(--primary)] text-sm transition">← Notebooks</a>
-                <span class="text-[color:var(--text-muted)]">/</span>
-                <h1 class="text-2xl font-bold font-['Orbitron'] text-[color:var(--text-main)] truncate">{{ $note->title }}</h1>
+                <a href="{{ route('notes.index') }}" class="text-(--text-muted) hover:text-(--primary) text-sm transition">← Notebooks</a>
+                <span class="text-(--text-muted)">/</span>
+                <h1 class="text-2xl font-bold font-['Orbitron'] text-(--text-main) truncate">{{ $note->title }}</h1>
             </div>
-            <p class="text-xs text-[color:var(--text-muted)] mt-1">{{ $note->description }}</p>
+            <p class="text-xs text-(--text-muted) mt-1">{{ $note->description }}</p>
         </div>
         
-        <div class="flex items-center space-x-2 bg-[color:var(--bg-card)] px-3 py-1.5 border border-[color:var(--border-color)] rounded-xl text-xs text-[color:var(--text-muted)]">
-            <span class="w-2.5 h-2.5 rounded-full bg-[color:var(--primary)] animate-ping"></span>
+        <div class="flex items-center space-x-2 bg-(--bg-card) px-3 py-1.5 border border-(--border-color) rounded-xl text-xs text-(--text-muted)">
+            <span class="w-2.5 h-2.5 rounded-full bg-(--primary) animate-ping"></span>
             <span>Rocky connected</span>
         </div>
     </div>
@@ -28,8 +28,8 @@
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Card 1: PDF Upload Intake Area -->
-            <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-                <h2 class="text-md font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
+            <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+                <h2 class="text-md font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
                     <span>📁</span> <span>PDF Document Intake</span>
                 </h2>
                 
@@ -40,15 +40,15 @@
                 @endif
 
                 @if($note->pdf_path)
-                    <div class="p-4 bg-[color:var(--bg-main)] border border-green-500/30 rounded-xl flex items-center justify-between">
+                    <div class="p-4 bg-(--bg-main) border border-green-500/30 rounded-xl flex items-center justify-between">
                         <div class="flex items-center space-x-3 overflow-hidden">
                             <span class="text-2xl">📄</span>
                             <div class="overflow-hidden">
                                 <p class="text-sm font-semibold truncate">{{ basename($note->pdf_path) }}</p>
-                                <p class="text-[10px] text-green-400">Teks berhasil diekstrak!</p>
+                                <p class="text-[10px] text-green-400">Text successfully extracted!</p>
                             </div>
                         </div>
-                        <label for="pdf-change-input" class="text-xs text-red-400 hover:underline cursor-pointer">Ganti</label>
+                        <label for="pdf-change-input" class="text-xs text-red-400 hover:underline cursor-pointer">Change</label>
                     </div>
 
                     <form action="{{ route('notes.pdf.upload', $note) }}" method="POST" enctype="multipart/form-data" class="hidden" id="pdf-change-form">
@@ -59,12 +59,12 @@
                     <!-- File Upload Form -->
                     <form action="{{ route('notes.pdf.upload', $note) }}" method="POST" enctype="multipart/form-data" id="pdf-upload-form" class="space-y-3">
                         @csrf
-                        <label class="border-2 border-dashed border-[color:var(--border-color)] rounded-xl p-8 text-center flex flex-col items-center justify-center space-y-3 hover:border-[color:var(--primary)] transition duration-200 bg-[color:var(--bg-main)]/50 cursor-pointer block">
+                        <label class="border-2 border-dashed border-(--border-color) rounded-xl p-8 text-center flex flex-col items-center justify-center space-y-3 hover:border-(--primary) transition duration-200 bg-(--bg-main)/50 cursor-pointer block">
                             <input type="file" name="pdf" accept="application/pdf" required class="hidden" onchange="document.getElementById('pdf-upload-form').submit()">
                             <span class="text-4xl">📥</span>
                             <div>
-                                <p class="text-sm font-semibold text-[color:var(--text-main)]">Pilih atau Seret Berkas PDF</p>
-                                <p class="text-[10px] text-[color:var(--text-muted)] mt-1">Ukuran berkas maksimal: 2MB</p>
+                                <p class="text-sm font-semibold text-(--text-main)">Choose or Drag PDF File</p>
+                                <p class="text-[10px] text-(--text-muted) mt-1">Maximum file size: 2MB</p>
                             </div>
                         </label>
                     </form>
@@ -72,44 +72,44 @@
             </div>
 
             <!-- Card 2: Document Summary (Grounding Preview) -->
-            <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-                <h2 class="text-md font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
-                    <span>📝</span> <span>Ringkasan Dokumen</span>
+            <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+                <h2 class="text-md font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
+                    <span>📝</span> <span>Document Summary</span>
                 </h2>
 
-                <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-xs min-h-[120px] max-h-[200px] overflow-y-auto leading-relaxed" id="document-summary-text">
+                <div class="p-4 bg-(--bg-main) border border-(--border-color) rounded-xl text-xs min-h-[120px] max-h-[200px] overflow-y-auto leading-relaxed" id="document-summary-text">
                     @if($note->summary)
                         <p class="whitespace-pre-line">{{ $note->summary }}</p>
                     @elseif($note->pdf_extracted_text)
                         <div class="space-y-1">
-                            <p class="text-[10px] text-[color:var(--text-muted)] italic">Pratinjau Teks Dokumen (Grounding):</p>
-                            <p class="line-clamp-6 text-[color:var(--text-main)] font-mono">{{ Str::limit($note->pdf_extracted_text, 300) }}</p>
+                            <p class="text-[10px] text-(--text-muted) italic">Document Text Preview (Grounding):</p>
+                            <p class="line-clamp-6 text-(--text-main) font-mono">{{ Str::limit($note->pdf_extracted_text, 300) }}</p>
                         </div>
                     @else
-                        <div class="text-center text-[color:var(--text-muted)] py-8 space-y-2">
+                        <div class="text-center text-(--text-muted) py-8 space-y-2">
                             <p>"Rocky has not summarized this page yet, friend!"</p>
-                            <p class="text-[10px]">Gunakan panel kendali kanan untuk merangkas dokumen.</p>
+                            <p class="text-[10px]">Use the right control panel to summarize the document.</p>
                         </div>
                     @endif
                 </div>
             </div>
 
             <!-- Card 3: Generated Quizzes Board -->
-            <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-                <h2 class="text-md font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
-                    <span>🎯</span> <span>Kuis Pemahaman (Active Recall)</span>
+            <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+                <h2 class="text-md font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
+                    <span>🎯</span> <span>Quizzes</span>
                 </h2>
 
                 <div class="space-y-2 max-h-[250px] overflow-y-auto" id="quiz-list-container">
                     @forelse($note->quizzes as $index => $quiz)
-                        <button onclick="selectQuiz({{ $quiz->id }})" class="w-full text-left p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl flex items-center justify-between text-xs transition cursor-pointer">
-                            <span>🎯 Kuis #{{ $index + 1 }} ({{ $quiz->questions->count() }} Soal)</span>
-                            <span class="text-[10px] text-[color:var(--text-muted)]">{{ $quiz->created_at->diffForHumans() }}</span>
+                        <button onclick="selectQuiz({{ $quiz->id }})" class="w-full text-left p-3 bg-(--bg-main) hover:bg-(--bg-card) border border-(--border-color) rounded-xl flex items-center justify-between text-xs transition cursor-pointer">
+                            <span>🎯 Quiz #{{ $index + 1 }} ({{ $quiz->questions->count() }} Questions)</span>
+                            <span class="text-[10px] text-(--text-muted)">{{ $quiz->created_at->diffForHumans() }}</span>
                         </button>
                     @empty
-                        <div class="p-4 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl text-center text-xs text-[color:var(--text-muted)] py-6 space-y-2">
+                        <div class="p-4 bg-(--bg-main) border border-(--border-color) rounded-xl text-center text-xs text-(--text-muted) py-6 space-y-2">
                             <p>"No quizzes generated yet for this notebook!"</p>
-                            <p class="text-[10px]">Rocky akan membuat kuis berisikan 5-10 pilihan ganda.</p>
+                            <p class="text-[10px]">Rocky will create a quiz with 5-10 multiple-choice questions.</p>
                         </div>
                     @endforelse
                 </div>
@@ -120,59 +120,59 @@
         <div class="lg:col-span-7 space-y-6">
             
             <!-- Controller Panel -->
-            <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-6">
+            <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h2 class="text-md font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
+                    <h2 class="text-md font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
                         <span>🤖</span> <span>Rocky Agent Workspace Control</span>
                     </h2>
                     
                     <!-- Style Toggle Switcher -->
-                    <div class="flex bg-[color:var(--bg-main)] p-1 rounded-xl border border-[color:var(--border-color)] text-xs self-start sm:self-center">
-                        <button id="style-btn-default" onclick="selectStyle('default')" class="px-3 py-1.5 rounded-lg bg-[color:var(--primary)] text-black font-bold cursor-pointer">Default</button>
-                        <button id="style-btn-learning" onclick="selectStyle('learning')" class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer">Learning</button>
-                        <button id="style-btn-formal" onclick="selectStyle('formal')" class="px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer">Formal</button>
+                    <div class="flex bg-(--bg-main) p-1 rounded-xl border border-(--border-color) text-xs self-start sm:self-center">
+                        <button id="style-btn-default" onclick="selectStyle('default')" class="px-3 py-1.5 rounded-lg bg-(--primary) text-black font-bold cursor-pointer">Default</button>
+                        <button id="style-btn-learning" onclick="selectStyle('learning')" class="px-3 py-1.5 rounded-lg text-(--text-muted) hover:text-(--text-main) transition cursor-pointer">Learning</button>
+                        <button id="style-btn-formal" onclick="selectStyle('formal')" class="px-3 py-1.5 rounded-lg text-(--text-muted) hover:text-(--text-main) transition cursor-pointer">Formal</button>
                     </div>
                 </div>
 
                 <!-- Generation Trigger Buttons -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <button id="generate-note-btn" onclick="generateNote()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <button id="generate-note-btn" onclick="generateNote()" class="py-3 px-4 rounded-xl border border-(--border-color) bg-(--bg-main) hover:border-(--primary) hover:text-(--primary) transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">✍️</span>
-                        <span>Buat Catatan</span>
+                        <span>Create Notes</span>
                     </button>
                     
-                    <button id="generate-summary-btn" onclick="generateSummary()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <button id="generate-summary-btn" onclick="generateSummary()" class="py-3 px-4 rounded-xl border border-(--border-color) bg-(--bg-main) hover:border-(--primary) hover:text-(--primary) transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">📝</span>
-                        <span>Ringkas Dokumen</span>
+                        <span>Summarize Document</span>
                     </button>
 
                     <form action="{{ route('notes.quiz.generate', $note) }}" method="POST" id="generate-quiz-form" class="hidden">
                         @csrf
                     </form>
-                    <button type="button" onclick="generateQuizSubmit()" class="py-3 px-4 rounded-xl border border-[color:var(--border-color)] bg-[color:var(--bg-main)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
+                    <button type="button" onclick="generateQuizSubmit()" class="py-3 px-4 rounded-xl border border-(--border-color) bg-(--bg-main) hover:border-(--primary) hover:text-(--primary) transition text-xs font-bold flex flex-col items-center justify-center space-y-2 {{ $note->pdf_extracted_text ? 'cursor-pointer' : 'cursor-not-allowed opacity-50' }}" {{ $note->pdf_extracted_text ? '' : 'disabled' }}>
                         <span class="text-xl">🎯</span>
                         <span>Generate Quiz</span>
                     </button>
                 </div>
                 
                 @if(!$note->pdf_extracted_text)
-                    <p class="text-[10px] text-[color:var(--text-muted)] text-center italic">
-                        *Harap unggah berkas PDF terlebih dahulu untuk mengaktifkan tombol kendali AI Rocky.
+                    <p class="text-[10px] text-(--text-muted) text-center italic">
+                        *Please upload a PDF file first to enable Rocky's AI control buttons.
                     </p>
                 @endif
             </div>
 
             <!-- Workspace Output/Display Area -->
-            <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-                <div class="flex items-center justify-between border-b border-[color:var(--border-color)] pb-3">
-                    <h3 class="font-bold text-sm font-['Orbitron'] text-[color:var(--text-main)] flex items-center space-x-2" id="workspace-title">
-                        <span>📖</span> <span>Catatan Belajar Rocky</span>
+            <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+                <div class="flex items-center justify-between border-b border-(--border-color) pb-3">
+                    <h3 class="font-bold text-sm font-['Orbitron'] text-(--text-main) flex items-center space-x-2" id="workspace-title">
+                        <span>📖</span> <span>Rocky's Study Notes</span>
                     </h3>
                     <span class="text-[10px] text-green-400 font-mono" id="workspace-status">Status: Ready</span>
                 </div>
 
                 <!-- Scrollable Display Board -->
-                <div id="workspace-board" class="p-6 bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl min-h-[350px] max-h-[500px] overflow-y-auto space-y-4 leading-relaxed text-sm prose prose-invert max-w-none">
+                <div id="workspace-board" class="p-6 bg-(--bg-main) border border-(--border-color) rounded-xl min-h-[350px] max-h-[500px] overflow-y-auto space-y-4 leading-relaxed text-sm prose prose-invert max-w-none">
                     <!-- Loaded dynamically via JS -->
                 </div>
             </div>
@@ -217,14 +217,14 @@
         ['default', 'learning', 'formal'].forEach(s => {
             const btn = document.getElementById(`style-btn-${s}`);
             if (s === style) {
-                btn.className = "px-3 py-1.5 rounded-lg bg-[color:var(--primary)] text-black font-bold cursor-pointer";
+                btn.className = "px-3 py-1.5 rounded-lg bg-(--primary) text-black font-bold cursor-pointer";
             } else {
-                btn.className = "px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer";
+                btn.className = "px-3 py-1.5 rounded-lg text-(--text-muted) hover:text-(--text-main) transition cursor-pointer";
             }
         });
 
         const titleContainer = document.getElementById('workspace-title');
-        titleContainer.innerHTML = `<span>📖</span> <span>Catatan Belajar Rocky (Gaya: ${style.toUpperCase()})</span>`;
+        titleContainer.innerHTML = `<span>📖</span> <span>Rocky's Study Notes (Style: ${style.toUpperCase()})</span>`;
 
         const statusBadge = document.getElementById('workspace-status');
         statusBadge.innerText = 'Status: Ready';
@@ -237,11 +237,11 @@
         } else {
             board.innerHTML = `
                 <div class="flex flex-col items-center justify-center text-center py-20 space-y-4">
-                    <span class="text-5xl animate-bounce">🕸️🕷️</span>
+                    <img src="{{ asset('favicon_io/android-chrome-192x192.png') }}" class="w-20 h-20 mx-auto">
                     <div>
-                        <p class="font-bold text-[color:var(--text-main)]">"Workspace is empty for ${style} style, friend!"</p>
-                        <p class="text-xs text-[color:var(--text-muted)] max-w-xs mt-1 mx-auto">
-                            Rocky belum menulis catatan untuk gaya ini. Klik tombol "Buat Catatan" untuk generate otomatis!
+                        <p class="font-bold text-(--text-main)">"Workspace is empty for ${style} style, friend!"</p>
+                        <p class="text-xs text-(--text-muted) max-w-xs mt-1 mx-auto">
+                            Rocky hasn't written notes for this style yet. Click the "Create Notes" button to generate automatically!
                         </p>
                     </div>
                 </div>
@@ -261,11 +261,11 @@
         
         summaryText.innerHTML = `
             <div class="space-y-2">
-                <p class="text-xs font-semibold text-[color:var(--primary)] animate-pulse">Rocky is summarizing... Amaze!</p>
-                <div class="h-1.5 w-full bg-[color:var(--bg-card)] rounded-full overflow-hidden">
-                    <div class="h-full bg-[color:var(--primary)] animate-pulse" style="width: 70%"></div>
+                <p class="text-xs font-semibold text-(--primary) animate-pulse">Rocky is summarizing... Amaze!</p>
+                <div class="h-1.5 w-full bg-(--bg-card) rounded-full overflow-hidden">
+                    <div class="h-full bg-(--primary) animate-pulse" style="width: 70%"></div>
                 </div>
-                <p id="summary-stream-output" class="text-xs text-[color:var(--text-main)] whitespace-pre-line"></p>
+                <p id="summary-stream-output" class="text-xs text-(--text-main) whitespace-pre-line"></p>
             </div>
         `;
 
@@ -313,14 +313,14 @@
         generateBtn.disabled = true;
         generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
         statusBadge.innerText = 'Status: Streaming...';
-        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono animate-pulse';
+        statusBadge.className = 'text-[10px] text-(--primary) font-mono animate-pulse';
         
         board.innerHTML = `
             <div class="flex flex-col items-center justify-center text-center py-20 space-y-4" id="note-stream-loader">
                 <span class="text-5xl animate-spin">🐾</span>
                 <div>
-                    <p class="font-bold text-[color:var(--text-main)]">Rocky is writing notes! Amaze!</p>
-                    <p class="text-xs text-[color:var(--text-muted)]">Rocky is reading document and writing notes in ${currentStyle} style...</p>
+                    <p class="font-bold text-(--text-main)">Rocky is writing notes! Amaze!</p>
+                    <p class="text-xs text-(--text-muted)">Rocky is reading document and writing notes in ${currentStyle} style...</p>
                 </div>
             </div>
             <div id="note-stream-output" class="space-y-4"></div>
@@ -369,7 +369,7 @@
             generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             statusBadge.innerText = 'Status: Error';
             statusBadge.className = 'text-[10px] text-red-400 font-mono';
-            board.innerHTML = `<p class="text-red-400 font-bold text-center py-20">Apology! Rocky faced error when writing notes. Question?</p>`;
+            board.innerHTML = `<p class="text-red-400 font-bold text-center py-20">Apology! Rocky faced error when writing notes.</p>`;
         };
     }
 
@@ -378,14 +378,14 @@
         const board = document.getElementById('workspace-board');
         
         statusBadge.innerText = 'Status: Generating Quiz...';
-        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono animate-pulse';
+        statusBadge.className = 'text-[10px] text-(--primary) font-mono animate-pulse';
         
         board.innerHTML = `
             <div class="flex flex-col items-center justify-center text-center py-20 space-y-4">
                 <span class="text-5xl animate-bounce">🎯</span>
                 <div>
-                    <p class="font-bold text-[color:var(--text-main)]">Rocky is generating a quiz! Fist bump!</p>
-                    <p class="text-xs text-[color:var(--text-muted)]">Rocky is formulating 5-10 multiple-choice questions from document...</p>
+                    <p class="font-bold text-(--text-main)">Rocky is generating a quiz! Fist bump!</p>
+                    <p class="text-xs text-(--text-muted)">Rocky is formulating 5-10 multiple-choice questions from document...</p>
                 </div>
             </div>
         `;
@@ -400,24 +400,24 @@
 
         // Reset style button states since we are in quiz mode
         ['default', 'learning', 'formal'].forEach(s => {
-            document.getElementById(`style-btn-${s}`).className = "px-3 py-1.5 rounded-lg text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition cursor-pointer";
+            document.getElementById(`style-btn-${s}`).className = "px-3 py-1.5 rounded-lg text-(--text-muted) hover:text-(--text-main) transition cursor-pointer";
         });
 
         const titleContainer = document.getElementById('workspace-title');
         const quizIndex = quizzes.indexOf(quiz) + 1;
-        titleContainer.innerHTML = `<span>🎯</span> <span>Rocky Quiz #${quizIndex} (${quiz.questions.length} Soal)</span>`;
+        titleContainer.innerHTML = `<span>🎯</span> <span>Rocky Quiz #${quizIndex} (${quiz.questions.length} Questions)</span>`;
 
         const statusBadge = document.getElementById('workspace-status');
         statusBadge.innerText = 'Status: Quiz Active';
-        statusBadge.className = 'text-[10px] text-[color:var(--primary)] font-mono';
+        statusBadge.className = 'text-[10px] text-(--primary) font-mono';
 
         const board = document.getElementById('workspace-board');
         
         let html = `
             <div class="space-y-6">
-                <div class="p-4 bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl">
-                    <p class="text-xs font-semibold text-[color:var(--primary)]">Fist bump! Let's test your knowledge, friend! Question?</p>
-                    <p class="text-[10px] text-[color:var(--text-muted)] mt-1">Pilih jawaban terbaik untuk masing-masing soal di bawah ini.</p>
+                <div class="p-4 bg-(--bg-card) border border-(--border-color) rounded-xl">
+                    <p class="text-xs font-semibold text-(--primary)">Fist bump! Let's test your knowledge. Words of encouragement!</p>
+                    <p class="text-[10px] text-(--text-muted) mt-1">Choose the best answer for each question below.</p>
                 </div>
                 
                 <form id="quiz-submission-form" onsubmit="submitQuiz(event, ${quiz.id})" class="space-y-6">
@@ -425,16 +425,16 @@
 
         quiz.questions.forEach((q, qIndex) => {
             html += `
-                <div class="p-5 bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-xl space-y-3" id="q-block-${q.id}">
-                    <p class="font-bold text-sm text-[color:var(--text-main)]">${qIndex + 1}. ${escapeHtml(q.question)}</p>
+                <div class="p-5 bg-(--bg-card) border border-(--border-color) rounded-xl space-y-3" id="q-block-${q.id}">
+                    <p class="font-bold text-sm text-(--text-main)">${qIndex + 1}. ${escapeHtml(q.question)}</p>
                     <div class="grid grid-cols-1 gap-2 pl-2">
             `;
 
             for (const [key, val] of Object.entries(q.options)) {
                 html += `
-                    <label class="flex items-start space-x-3 p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-main)]/80 border border-[color:var(--border-color)] rounded-lg cursor-pointer transition" id="label-${q.id}-${key}">
-                        <input type="radio" name="question_${q.id}" value="${key}" required class="mt-0.5 text-[color:var(--primary)] focus:ring-[color:var(--primary)]">
-                        <span class="text-xs text-[color:var(--text-main)]"><strong class="text-[color:var(--primary)]">${key}.</strong> ${escapeHtml(val)}</span>
+                    <label class="flex items-start space-x-3 p-3 bg-(--bg-main) hover:bg-(--bg-main)/80 border border-(--border-color) rounded-lg cursor-pointer transition" id="label-${q.id}-${key}">
+                        <input type="radio" name="question_${q.id}" value="${key}" required class="mt-0.5 text-(--primary) focus:ring-(--primary)">
+                        <span class="text-xs text-(--text-main)"><strong class="text-(--primary)">${key}.</strong> ${escapeHtml(val)}</span>
                     </label>
                 `;
             }
@@ -447,8 +447,8 @@
         });
 
         html += `
-                    <button type="submit" class="w-full py-3 bg-[color:var(--primary)] text-black hover:shadow-[0_0_15px_var(--border-glow)] transition rounded-xl font-bold text-xs uppercase cursor-pointer">
-                        Kirim Jawaban Anda
+                    <button type="submit" class="w-full py-3 bg-(--primary) text-black hover:shadow-[0_0_15px_var(--border-glow)] transition rounded-xl font-bold text-xs uppercase cursor-pointer">
+                        Submit Your Answers
                     </button>
                 </form>
             </div>
@@ -473,7 +473,7 @@
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.innerText = 'MEMPROSES...';
+            submitBtn.innerText = 'PROCESSING...';
         }
 
         fetch(`/notes/{{ $note->id }}/quizzes/${quizId}/submit`, {
@@ -487,7 +487,7 @@
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Gagal mengirim jawaban.');
+                throw new Error('Failed to submit answers.');
             }
             return response.json();
         })
@@ -509,7 +509,7 @@
                 for (const key of ['A', 'B', 'C', 'D']) {
                     const lbl = document.getElementById(`label-${q.id}-${key}`);
                     if (lbl) {
-                        lbl.className = "flex items-start space-x-3 p-3 bg-[color:var(--bg-main)] hover:bg-[color:var(--bg-main)]/80 border border-[color:var(--border-color)] rounded-lg cursor-pointer transition";
+                        lbl.className = "flex items-start space-x-3 p-3 bg-(--bg-main) hover:bg-(--bg-main)/80 border border-(--border-color) rounded-lg cursor-pointer transition";
                     }
                 }
 
@@ -521,7 +521,7 @@
                         selectedLabel.className = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-pointer transition text-green-300";
                     }
                     if (feedbackDiv) {
-                        feedbackDiv.innerHTML = `<span class="text-green-400 font-bold">✓ Benar! Rocky bangga!</span>`;
+                        feedbackDiv.innerHTML = `<span class="text-green-400 font-bold">✓ Correct! Rocky is proud!</span>`;
                     }
                 } else {
                     if (selectedLabel) {
@@ -531,7 +531,7 @@
                         correctLabel.className = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-pointer transition text-green-300";
                     }
                     if (feedbackDiv) {
-                        feedbackDiv.innerHTML = `<span class="text-red-400 font-bold">✗ Salah. Jawaban benar: ${correctAnswer}. Rocky sedih.</span>`;
+                        feedbackDiv.innerHTML = `<span class="text-red-400 font-bold">✗ Incorrect. Correct answer: ${correctAnswer}. Rocky is sad.</span>`;
                     }
                 }
             });
@@ -542,11 +542,11 @@
             const accuracyBanner = document.createElement('div');
             accuracyBanner.className = `p-4 mb-6 rounded-xl border text-center font-bold text-sm ${data.accuracy >= 80 ? 'bg-green-950/40 border-green-500 text-green-200' : 'bg-red-950/40 border-red-500 text-red-200'}`;
             
-            let message = `Skor Anda: ${data.correct_count}/${data.total_questions} (${data.accuracy}%). `;
+            let message = `Your Score: ${data.correct_count}/${data.total_questions} (${data.accuracy}%). `;
             if (data.accuracy >= 80) {
                 message += `Amaze! Rocky fix fist bump! 🐾`;
             } else {
-                message += `Rocky sarankan baca lagi dokumen, friend! You watch, question?`;
+                message += `Rocky suggests reading the document again! Question?`;
             }
             accuracyBanner.innerHTML = message;
             
@@ -565,11 +565,11 @@
             }
         })
         .catch(err => {
-            console.error("Gagal mengirim kuis:", err);
-            alert("Terjadi kesalahan saat memproses kuis. Silakan coba lagi!");
+            console.error("Failed to submit quiz:", err);
+            alert("An error occurred while processing the quiz. Please try again!");
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'KIRIM JAWABAN ANDA';
+                submitBtn.innerText = 'SUBMIT YOUR ANSWERS';
             }
         });
     }
