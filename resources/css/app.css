@@ -42,11 +42,11 @@
 .theme-dark {
     --bg-main: #030712;
     --bg-card: #1F2937;
-    --primary: #F59E0B;
+    --primary: #bc6c25;
     --primary-hover: #D97706;
     --text-main: #E5E7EB;
     --text-muted: #9CA3AF;
-    --border-glow: rgba(245, 158, 11, 0.2);
+    --border-glow: rgba(188, 108, 37, 0.2);
     --border-color: #374151;
 }
 
