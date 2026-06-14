@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto px-6 py-12 w-full space-y-8">
-    <h1 class="text-3xl font-extrabold font-['Orbitron'] text-[color:var(--text-main)] border-b border-[color:var(--border-color)] pb-4">
-        Pengaturan Lab
+    <h1 class="text-3xl font-extrabold font-['Orbitron'] text-(--text-main) border-b border-(--border-color) pb-4">
+        Lab Settings
     </h1>
 
     @if(session('status') === 'password-updated')
@@ -22,11 +22,11 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Theme Switcher Card -->
-        <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-            <h2 class="text-xl font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
-                <span>🎨</span> <span>Tema Visual</span>
+        <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+            <h2 class="text-xl font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
+                <span>🎨</span> <span>Visual Theme</span>
             </h2>
-            <p class="text-xs text-[color:var(--text-muted)]">"Choose screen layout, friend! Many stars!"</p>
+            <p class="text-xs text-(--text-muted)">"Choose screen layout, friend! Many stars!"</p>
 
             <form action="{{ route('settings.theme') }}" method="POST" id="theme-form" class="space-y-4">
                 @csrf
@@ -38,7 +38,7 @@
                                onchange="document.getElementById('theme-form').submit()">
                         <div class="p-3 border-2 rounded-xl text-center font-bold text-xs bg-[#050F0B] text-[#E6F4EA] transition
                                     {{ auth()->user()->theme_preference === 'adrian' ? 'border-[#00FF9D]' : 'border-[#1A3025]' }}">
-                            Adrian (Default)
+                            Adrian (Green)
                         </div>
                     </label>
 
@@ -59,7 +59,7 @@
                                {{ auth()->user()->theme_preference === 'dark' ? 'checked' : '' }}
                                onchange="document.getElementById('theme-form').submit()">
                         <div class="p-3 border-2 rounded-xl text-center font-bold text-xs bg-[#030712] text-[#E5E7EB] transition
-                                    {{ auth()->user()->theme_preference === 'dark' ? 'border-[#F59E0B]' : 'border-[#374151]' }}">
+                                    {{ auth()->user()->theme_preference === 'dark' ? 'border-[#bc6c25]' : 'border-[#374151]' }}">
                             Classic Dark
                         </div>
                     </label>
@@ -79,11 +79,11 @@
         </div>
 
         <!-- Password Change Card -->
-        <div class="bg-[color:var(--bg-card)] border border-[color:var(--border-color)] rounded-2xl p-6 space-y-4">
-            <h2 class="text-xl font-bold font-['Orbitron'] text-[color:var(--primary)] flex items-center space-x-2">
-                <span>🔑</span> <span>Ganti Password</span>
+        <div class="bg-(--bg-card) border border-(--border-color) rounded-2xl p-6 space-y-4">
+            <h2 class="text-xl font-bold font-['Orbitron'] text-(--primary) flex items-center space-x-2">
+                <span>🔑</span> <span>Change Password</span>
             </h2>
-            <p class="text-xs text-[color:var(--text-muted)]">"Switch locks key, friend! Prevent Erid intrusion!"</p>
+            <p class="text-xs text-(--text-muted)">"Want to change your password? Rocky fix!"</p>
 
             @if($errors->any())
                 <div class="p-3 bg-red-950/50 border border-red-500 text-red-200 text-xs rounded-lg">
@@ -98,25 +98,25 @@
             <form action="{{ route('settings.password') }}" method="POST" class="space-y-3">
                 @csrf
                 <div>
-                    <label for="current_password" class="block text-xs font-semibold mb-1 text-[color:var(--text-main)]">Password Saat Ini</label>
+                    <label for="current_password" class="block text-xs font-semibold mb-1 text-(--text-main)">Current Password</label>
                     <input type="password" name="current_password" id="current_password" required
-                           class="w-full px-3 py-2 text-sm bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl focus:border-[color:var(--primary)] focus:outline-none text-[color:var(--text-main)] transition">
+                           class="w-full px-3 py-2 text-sm bg-(--bg-main) border border-(--border-color) rounded-xl focus:border-(--primary) focus:outline-none text-(--text-main) transition">
                 </div>
 
                 <div>
-                    <label for="password" class="block text-xs font-semibold mb-1 text-[color:var(--text-main)]">Password Baru</label>
+                    <label for="password" class="block text-xs font-semibold mb-1 text-(--text-main)">New Password</label>
                     <input type="password" name="password" id="password" required
-                           class="w-full px-3 py-2 text-sm bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl focus:border-[color:var(--primary)] focus:outline-none text-[color:var(--text-main)] transition">
+                           class="w-full px-3 py-2 text-sm bg-(--bg-main) border border-(--border-color) rounded-xl focus:border-(--primary) focus:outline-none text-(--text-main) transition">
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="block text-xs font-semibold mb-1 text-[color:var(--text-main)]">Konfirmasi Password Baru</label>
+                    <label for="password_confirmation" class="block text-xs font-semibold mb-1 text-(--text-main)">Confirm New Password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation" required
-                           class="w-full px-3 py-2 text-sm bg-[color:var(--bg-main)] border border-[color:var(--border-color)] rounded-xl focus:border-[color:var(--primary)] focus:outline-none text-[color:var(--text-main)] transition">
+                           class="w-full px-3 py-2 text-sm bg-(--bg-main) border border-(--border-color) rounded-xl focus:border-(--primary) focus:outline-none text-(--text-main) transition">
                 </div>
 
                 <button type="submit" class="w-full py-2.5 rounded-xl btn-semi-3d text-sm mt-2 cursor-pointer">
-                    Perbarui Password
+                    Update Password
                 </button>
             </form>
         </div>
