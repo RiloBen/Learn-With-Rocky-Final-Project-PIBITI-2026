@@ -10,6 +10,14 @@ class Quiz extends Model
 {
     protected $fillable = [
         'note_id',
+        'completed_at',
+        'score',
+        'user_answers',
+    ];
+
+    protected $casts = [
+        'completed_at' => 'datetime',
+        'user_answers' => 'array',
     ];
 
     public function note(): BelongsTo

@@ -408,8 +408,8 @@
         titleContainer.innerHTML = `<span>🎯</span> <span>Rocky Quiz #${quizIndex} (${quiz.questions.length} Questions)</span>`;
 
         const statusBadge = document.getElementById('workspace-status');
-        statusBadge.innerText = 'Status: Quiz Active';
-        statusBadge.className = 'text-[10px] text-(--primary) font-mono';
+        statusBadge.innerText = quiz.completed_at ? 'Status: Completed' : 'Status: Quiz Active';
+        statusBadge.className = quiz.completed_at ? 'text-[10px] text-green-400 font-mono' : 'text-[10px] text-(--primary) font-mono';
 
         const board = document.getElementById('workspace-board');
         
@@ -419,11 +419,29 @@
                     <p class="text-xs font-semibold text-(--primary)">Fist bump! Let's test your knowledge. Words of encouragement!</p>
                     <p class="text-[10px] text-(--text-muted) mt-1">Choose the best answer for each question below.</p>
                 </div>
-                
+        `;
+
+        if (quiz.completed_at) {
+            // Render Score Banner
+            const scorePercent = quiz.score;
+            const correctCount = Math.round((scorePercent / 100) * quiz.questions.length);
+            const totalQuestions = quiz.questions.length;
+            
+            html += `
+                <div class="p-4 rounded-xl border text-center font-bold text-sm ${scorePercent >= 80 ? 'bg-green-950/40 border-green-500 text-green-200' : 'bg-red-950/40 border-red-500 text-red-200'}">
+                    Your Score: ${correctCount}/${totalQuestions} (${scorePercent}%). ${scorePercent >= 80 ? 'Amaze! Rocky fix fist bump! 🐾' : 'Rocky suggests reading the document again! Question?'}
+                </div>
+            `;
+        }
+
+        html += `
                 <form id="quiz-submission-form" onsubmit="submitQuiz(event, ${quiz.id})" class="space-y-6">
         `;
 
         quiz.questions.forEach((q, qIndex) => {
+            const userAnswer = quiz.user_answers ? quiz.user_answers[q.id] : null;
+            const isCorrect = userAnswer !== null && userAnswer.toUpperCase() === q.correct_answer.toUpperCase();
+
             html += `
                 <div class="p-5 bg-(--bg-card) border border-(--border-color) rounded-xl space-y-3" id="q-block-${q.id}">
                     <p class="font-bold text-sm text-(--text-main)">${qIndex + 1}. ${escapeHtml(q.question)}</p>
@@ -431,9 +449,27 @@
             `;
 
             for (const [key, val] of Object.entries(q.options)) {
+                let labelClass = "flex items-start space-x-3 p-3 bg-(--bg-main) hover:bg-(--bg-main)/80 border border-(--border-color) rounded-lg cursor-pointer transition";
+                let checkedAttr = "";
+                let disabledAttr = quiz.completed_at ? "disabled" : "";
+
+                if (quiz.completed_at) {
+                    if (key === userAnswer && isCorrect) {
+                        labelClass = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-not-allowed transition text-green-300";
+                        checkedAttr = "checked";
+                    } else if (key === userAnswer && !isCorrect) {
+                        labelClass = "flex items-start space-x-3 p-3 bg-red-950/20 border border-red-500/50 rounded-lg cursor-not-allowed transition text-red-300";
+                        checkedAttr = "checked";
+                    } else if (key === q.correct_answer) {
+                        labelClass = "flex items-start space-x-3 p-3 bg-green-950/20 border border-green-500/50 rounded-lg cursor-not-allowed transition text-green-300";
+                    } else {
+                        labelClass = "flex items-start space-x-3 p-3 bg-(--bg-main) border border-(--border-color) rounded-lg cursor-not-allowed transition opacity-60";
+                    }
+                }
+
                 html += `
-                    <label class="flex items-start space-x-3 p-3 bg-(--bg-main) hover:bg-(--bg-main)/80 border border-(--border-color) rounded-lg cursor-pointer transition" id="label-${q.id}-${key}">
-                        <input type="radio" name="question_${q.id}" value="${key}" required class="mt-0.5 text-(--primary) focus:ring-(--primary)">
+                    <label class="${labelClass}" id="label-${q.id}-${key}">
+                        <input type="radio" name="question_${q.id}" value="${key}" ${checkedAttr} ${disabledAttr} required class="mt-0.5 text-(--primary) focus:ring-(--primary)">
                         <span class="text-xs text-(--text-main)"><strong class="text-(--primary)">${key}.</strong> ${escapeHtml(val)}</span>
                     </label>
                 `;
@@ -441,15 +477,32 @@
 
             html += `
                     </div>
-                    <div id="q-feedback-${q.id}" class="text-[11px] font-bold mt-2 hidden"></div>
+            `;
+
+            if (quiz.completed_at) {
+                if (isCorrect) {
+                    html += `<div id="q-feedback-${q.id}" class="text-[11px] font-bold mt-2 text-green-400">✓ Correct! Rocky is proud!</div>`;
+                } else {
+                    html += `<div id="q-feedback-${q.id}" class="text-[11px] font-bold mt-2 text-red-400">✗ Incorrect. Correct answer: ${q.correct_answer}. Rocky is sad.</div>`;
+                }
+            } else {
+                html += `<div id="q-feedback-${q.id}" class="text-[11px] font-bold mt-2 hidden"></div>`;
+            }
+
+            html += `
                 </div>
             `;
         });
 
-        html += `
+        if (!quiz.completed_at) {
+            html += `
                     <button type="submit" class="w-full py-3 bg-(--primary) text-black hover:shadow-[0_0_15px_var(--border-glow)] transition rounded-xl font-bold text-xs uppercase cursor-pointer">
                         Submit Your Answers
                     </button>
+            `;
+        }
+
+        html += `
                 </form>
             </div>
         `;
@@ -492,6 +545,18 @@
             return response.json();
         })
         .then(data => {
+            // Update the local cache
+            quiz.completed_at = new Date().toISOString();
+            quiz.score = data.accuracy;
+            quiz.user_answers = answers;
+
+            // Update status badge
+            const statusBadge = document.getElementById('workspace-status');
+            if (statusBadge) {
+                statusBadge.innerText = 'Status: Completed';
+                statusBadge.className = 'text-[10px] text-green-400 font-mono';
+            }
+
             quiz.questions.forEach((q) => {
                 const result = data.results[q.id];
                 const isCorrect = result ? result.correct : false;

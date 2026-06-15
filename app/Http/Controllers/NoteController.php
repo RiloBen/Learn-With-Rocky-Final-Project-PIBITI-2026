@@ -300,6 +300,13 @@ class NoteController extends Controller
             abort(400, 'Quiz does not belong to this notebook.');
         }
 
+        // Prevent resubmission
+        if ($quiz->completed_at !== null) {
+            return response()->json([
+                'error' => 'Apology! This quiz has already been completed, friend! Rocky cannot accept it again.'
+            ], 400);
+        }
+
         $validated = $request->validate([
             'answers' => ['required', 'array'],
         ]);
@@ -338,6 +345,13 @@ class NoteController extends Controller
         }
 
         $accuracy = $totalQuestions > 0 ? round(($correctCount / $totalQuestions) * 100) : 0;
+
+        // Save completion status, score, and submitted answers
+        $quiz->update([
+            'completed_at' => now(),
+            'score' => $accuracy,
+            'user_answers' => $answers,
+        ]);
 
         return response()->json([
             'accuracy' => $accuracy,
